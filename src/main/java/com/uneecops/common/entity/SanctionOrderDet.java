@@ -83,8 +83,8 @@ public class SanctionOrderDet extends CommonEntityForAll{
 //    @OneToOne(mappedBy = "sanctionOrderDet", cascade = CascadeType.ALL, orphanRemoval = true)
 //    private SanOrderScrnSpecCESSData scrnSpecCESSData;
     
-    @OneToOne(mappedBy = "sanctionOrderDet", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private SanctionAmntDetails sanctionAmntDetails;  
+    @OneToMany(mappedBy = "sanctionOrderDet", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<SanctionAmntDetails> sanctionAmntDetails;  
     
 	@OneToMany(mappedBy = "sanctionOrderDet", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<RfdSanOrdDataDocDet> commonDocDetails;

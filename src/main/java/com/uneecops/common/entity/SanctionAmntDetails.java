@@ -111,7 +111,7 @@ public class SanctionAmntDetails extends CommonEntityForAll{
 	@Enumerated(EnumType.STRING)
 	private SanctionAmount sancAmntType;
 
-	@OneToOne
+	@ManyToOne
 	@JoinColumn(name = "sancOrdDet_id", nullable = false)
 	private SanctionOrderDet sanctionOrderDet;
 
