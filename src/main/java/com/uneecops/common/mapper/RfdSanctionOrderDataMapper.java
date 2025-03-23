@@ -1,6 +1,8 @@
 package com.uneecops.common.mapper;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,6 +35,7 @@ import com.uneecops.common.entity.RfdSanOrdTODet;
 import com.uneecops.common.entity.SanctionAmntDetails;
 import com.uneecops.common.entity.SanctionOrderDet;
 import com.uneecops.common.enums.SanctionAmount;
+import com.uneecops.common.enums.TaxType;
 
 public class RfdSanctionOrderDataMapper {
 
@@ -44,7 +47,7 @@ public class RfdSanctionOrderDataMapper {
 		List<AdjustedDemandDet_Dto> dtolist = dto.getScrnSpecDetSanctionOrderData().getSanctionOrderDet()
 				.getAdjustedDemDet();
 		item.setSanctionOrderDet(sanctionOrderDetMapper(dto.getScrnSpecDetSanctionOrderData().getSanctionOrderDet(),
-				item, dtolist, rfdResponse , dto));
+				item, dtolist, rfdResponse, dto));
 
 //		set item
 		BeanUtils.copyProperties(itemDto, item);
@@ -56,7 +59,7 @@ public class RfdSanctionOrderDataMapper {
 	}
 
 	private static SanctionOrderDet sanctionOrderDetMapper(SanctionOrderDet_Dto dto, Items item,
-			List<AdjustedDemandDet_Dto> dtolist, RfdResponse rfdResponse , RfdSanctionOrderData_Dto dataDto) {
+			List<AdjustedDemandDet_Dto> dtolist, RfdResponse rfdResponse, RfdSanctionOrderData_Dto dataDto) {
 		if (ObjectUtils.isEmpty(dto))
 			return null;
 		SanctionOrderDet orderDet = setCommonValues(new SanctionOrderDet(), rfdResponse);
@@ -112,9 +115,9 @@ public class RfdSanctionOrderDataMapper {
 //		orderDet.setScrnSpecCGSTData(scrnSpecCGSTDataMapper(dto.getRefAmtScreenData().getScrnSpecCGSTData(), orderDet));
 //		orderDet.setScrnSpecCESSData(cessDataMapper(dto.getRefAmtScreenData().getScrnSpecCESSData(), orderDet));
 //		orderDet.setScrnSpecSGSTData(scrnSpecSGSTDataMapper(dto.getRefAmtScreenData().getScrnSpecSGSTData(), orderDet));
-		orderDet.setCommonDocDetails(sanOrdDataDocDetsMapper(dataDto.getCommonDocDetails(), orderDet , rfdResponse));
-		orderDet.setCommonTaxOfficerDet(sanOrdTODetMapper(dataDto.getCommonTaxOfficerDet(),  orderDet ,rfdResponse));
-		orderDet.setSanctionAmntDetails(sanctionAmntDetailsMapper(dto,orderDet , rfdResponse));
+		orderDet.setCommonDocDetails(sanOrdDataDocDetsMapper(dataDto.getCommonDocDetails(), orderDet, rfdResponse));
+		orderDet.setCommonTaxOfficerDet(sanOrdTODetMapper(dataDto.getCommonTaxOfficerDet(), orderDet, rfdResponse));
+		orderDet.setSanctionAmntDetails(sanctionAmntDetailsMapper(dto, orderDet, rfdResponse));
 		orderDet.setItems(item);
 		return orderDet;
 	}
@@ -255,102 +258,112 @@ public class RfdSanctionOrderDataMapper {
 		return adjustedIgst;
 	}
 
-	public static List<SanctionAmntDetails> sanctionAmntDetailsMapper(SanctionOrderDet_Dto dto, SanctionOrderDet sanctionOrderDet, RfdResponse response) {
-	    List<SanctionAmntDetails> detailsList = new ArrayList<>();
-
+	public static List<SanctionAmntDetails> sanctionAmntDetailsMapper(SanctionOrderDet_Dto dto,
+	        SanctionOrderDet sanctionOrderDet, RfdResponse response) {
 	    if (dto == null || dto.getRefAmtScreenData() == null) {
-	        return detailsList;
+	        return Collections.emptyList();
 	    }
 
 	    RefAmtScreenData_Dto amtScreenData = dto.getRefAmtScreenData();
+	    List<SanctionAmntDetails> sanctionAmntDetailsList = new ArrayList<>();
 
-	    if (amtScreenData.getScrnSpecIGSTData() != null) {
-	        mapTaxDetails(detailsList, amtScreenData.getScrnSpecIGSTData(), "igst", sanctionOrderDet, response);
-	    }
-	    if (amtScreenData.getScrnSpecCGSTData() != null) {
-	        mapTaxDetails(detailsList, amtScreenData.getScrnSpecCGSTData(), "cgst", sanctionOrderDet, response);
-	    }
-	    if (amtScreenData.getScrnSpecSGSTData() != null) {
-	        mapTaxDetails(detailsList, amtScreenData.getScrnSpecSGSTData(), "sgst", sanctionOrderDet, response);
-	    }
-	    if (amtScreenData.getScrnSpecCESSData() != null) {
-	        mapTaxDetails(detailsList, amtScreenData.getScrnSpecCESSData(), "cess", sanctionOrderDet, response);
+	    for (SanctionAmount amountType : SanctionAmount.values()) {
+	        SanctionAmntDetails entity = new SanctionAmntDetails();
+	        setCommonValues(entity, response);
+	        entity.setSanctionOrderDet(sanctionOrderDet);
+	        entity.setSancAmntType(amountType);
+
+	        combineTaxValues(entity, amtScreenData.getScrnSpecIGSTData(), TaxType.IGST, amountType);
+	        combineTaxValues(entity, amtScreenData.getScrnSpecCGSTData(), TaxType.CGST, amountType);
+	        combineTaxValues(entity, amtScreenData.getScrnSpecSGSTData(), TaxType.SGST, amountType);
+	        combineTaxValues(entity, amtScreenData.getScrnSpecCESSData(), TaxType.CESS, amountType);
+
+	        sanctionAmntDetailsList.add(entity);
 	    }
 
-	    return detailsList;
+	    return sanctionAmntDetailsList;
 	}
 
-	private static void mapTaxDetails(List<SanctionAmntDetails> detailsList, CommonAmountDetForAllDto dto, String taxType, SanctionOrderDet sanctionOrderDet, RfdResponse response) {
+	private static void combineTaxValues(SanctionAmntDetails entity, CommonAmountDetForAllDto dto, TaxType taxType, SanctionAmount amountType) {
 	    if (dto == null) return;
 
-	    addSanctionAmount(detailsList, dto.getClaimedAmt(), taxType, SanctionAmount.CLAIMEDAMNT, sanctionOrderDet, response);
-	    addSanctionAmount(detailsList, dto.getProvamt(), taxType, SanctionAmount.PROVISIONALAMNT, sanctionOrderDet, response);
-	    addSanctionAmount(detailsList, dto.getInadmissableamt(), taxType, SanctionAmount.INADMISSABLEAMNT, sanctionOrderDet, response);
-	    addSanctionAmount(detailsList, dto.getGrossamt(), taxType, SanctionAmount.GROSSAMNT, sanctionOrderDet, response);
-	    addSanctionAmount(detailsList, dto.getAdjustedamt(), taxType, SanctionAmount.ADJUSTEDAMNT, sanctionOrderDet, response);
-	    addSanctionAmount(detailsList, dto.getNetamt(), taxType, SanctionAmount.NETAMNT, sanctionOrderDet, response);
-	    addSanctionAmount(detailsList, dto.getRecoveredAmt(), taxType, SanctionAmount.RECOVEREDAMNT, sanctionOrderDet, response);
-	    addSanctionAmount(detailsList, dto.getCwfamt(), taxType, SanctionAmount.CWFINITIATEDAMNT, sanctionOrderDet, response);
-	}
+	    // Select the correct sanction amount type data
+	    CommonStatementRefundClaimDto sanctionData = switch (amountType) {
+	        case CLAIMEDAMNT -> dto.getClaimedAmt();
+	        case INADMISSABLEAMNT -> dto.getInadmissableamt();
+	        case RECOVEREDAMNT -> dto.getRecoveredAmt();
+	        case NETAMNT -> dto.getNetamt();
+	        case ADJUSTEDAMNT -> dto.getAdjustedamt();
+	        case PROVISIONALAMNT -> dto.getProvamt();
+	        case CWFINITIATEDAMNT -> dto.getCwfamt();
+	        case GROSSAMNT -> dto.getGrossamt();
+	    };
 
-	private static void addSanctionAmount(List<SanctionAmntDetails> detailsList, CommonStatementRefundClaimDto dto, String taxType, SanctionAmount amountType, SanctionOrderDet sanctionOrderDet, RfdResponse response) {
-	    if (dto == null) return;
-
-	    SanctionAmntDetails entity = setCommonValues(new SanctionAmntDetails(), response);
-	    entity.setSanctionOrderDet(sanctionOrderDet);
-	    entity.setSancAmntType(amountType);
-
-	    switch (taxType.toLowerCase()) {
-	        case "igst":
-	            entity.setIgstIntrest(dto.getIntrest());
-	            entity.setIgstOthers(dto.getOthers());
-	            entity.setIgstFee(dto.getFee());
-	            entity.setIgstPenalty(dto.getPenalty());
-	            entity.setIgstTax(dto.getTax());
-	            entity.setIgstTot(dto.getTot());
-	            break;
-	        case "cgst":
-	            entity.setCgstIntrest(dto.getIntrest());
-	            entity.setCgstOthers(dto.getOthers());
-	            entity.setCgstFee(dto.getFee());
-	            entity.setCgstPenalty(dto.getPenalty());
-	            entity.setCgstTax(dto.getTax());
-	            entity.setCgstTot(dto.getTot());
-	            break;
-	        case "sgst":
-	            entity.setSgstIntrest(dto.getIntrest());
-	            entity.setSgstOthers(dto.getOthers());
-	            entity.setSgstFee(dto.getFee());
-	            entity.setSgstPenalty(dto.getPenalty());
-	            entity.setSgstTax(dto.getTax());
-	            entity.setSgstTot(dto.getTot());
-	            break;
-	        case "cess":
-	            entity.setCessIntrest(dto.getIntrest());
-	            entity.setCessOthers(dto.getOthers());
-	            entity.setCessFee(dto.getFee());
-	            entity.setCessPenalty(dto.getPenalty());
-	            entity.setCessTax(dto.getTax());
-	            entity.setCessTot(dto.getTot());
-	            break;
+	    if (sanctionData != null) {
+	        setCombinedTaxValues(entity, sanctionData, taxType);
 	    }
-	    detailsList.add(entity);
 	}
 
-	private static RfdSanOrdTODet sanOrdTODetMapper(CommonTaxOfficerDet_Dto dto, SanctionOrderDet orderDet , RfdResponse response) {
+	private static BigDecimal safeAdd(BigDecimal a, BigDecimal b) {
+		return (a != null ? a : BigDecimal.ZERO).add(b != null ? b : BigDecimal.ZERO);
+	}
+
+	private static void setCombinedTaxValues(SanctionAmntDetails entity, CommonStatementRefundClaimDto dto,
+			TaxType taxType) {
+		if (dto == null)
+			return;
+		switch (taxType) {
+		case IGST -> {
+			entity.setIgstIntrest(safeAdd(entity.getIgstIntrest(), dto.getIntrest()));
+			entity.setIgstOthers(safeAdd(entity.getIgstOthers(), dto.getOthers()));
+			entity.setIgstFee(safeAdd(entity.getIgstFee(), dto.getFee()));
+			entity.setIgstPenalty(safeAdd(entity.getIgstPenalty(), dto.getPenalty()));
+			entity.setIgstTax(safeAdd(entity.getIgstTax(), dto.getTax()));
+			entity.setIgstTot(safeAdd(entity.getIgstTot(), dto.getTot()));
+		}
+		case CGST -> {
+			entity.setCgstIntrest(safeAdd(entity.getCgstIntrest(), dto.getIntrest()));
+			entity.setCgstOthers(safeAdd(entity.getCgstOthers(), dto.getOthers()));
+			entity.setCgstFee(safeAdd(entity.getCgstFee(), dto.getFee()));
+			entity.setCgstPenalty(safeAdd(entity.getCgstPenalty(), dto.getPenalty()));
+			entity.setCgstTax(safeAdd(entity.getCgstTax(), dto.getTax()));
+			entity.setCgstTot(safeAdd(entity.getCgstTot(), dto.getTot()));
+		}
+		case SGST -> {
+			entity.setSgstIntrest(safeAdd(entity.getSgstIntrest(), dto.getIntrest()));
+			entity.setSgstOthers(safeAdd(entity.getSgstOthers(), dto.getOthers()));
+			entity.setSgstFee(safeAdd(entity.getSgstFee(), dto.getFee()));
+			entity.setSgstPenalty(safeAdd(entity.getSgstPenalty(), dto.getPenalty()));
+			entity.setSgstTax(safeAdd(entity.getSgstTax(), dto.getTax()));
+			entity.setSgstTot(safeAdd(entity.getSgstTot(), dto.getTot()));
+		}
+		case CESS -> {
+			entity.setCessIntrest(safeAdd(entity.getCessIntrest(), dto.getIntrest()));
+			entity.setCessOthers(safeAdd(entity.getCessOthers(), dto.getOthers()));
+			entity.setCessFee(safeAdd(entity.getCessFee(), dto.getFee()));
+			entity.setCessPenalty(safeAdd(entity.getCessPenalty(), dto.getPenalty()));
+			entity.setCessTax(safeAdd(entity.getCessTax(), dto.getTax()));
+			entity.setCessTot(safeAdd(entity.getCessTot(), dto.getTot()));
+		}
+		}
+	}
+
+	private static RfdSanOrdTODet sanOrdTODetMapper(CommonTaxOfficerDet_Dto dto, SanctionOrderDet orderDet,
+			RfdResponse response) {
 		if (ObjectUtils.isEmpty(dto))
 			return null;
-		RfdSanOrdTODet rfdSanOrdTODet = setCommonValues(new RfdSanOrdTODet() , response);
+		RfdSanOrdTODet rfdSanOrdTODet = setCommonValues(new RfdSanOrdTODet(), response);
 		BeanUtils.copyProperties(dto, rfdSanOrdTODet);
 		rfdSanOrdTODet.setSanctionOrderDet(orderDet);
 		return rfdSanOrdTODet;
 	}
 
-	private static List<RfdSanOrdDataDocDet> sanOrdDataDocDetsMapper(List<CommonDocDetails_Dto> dtoList, SanctionOrderDet orderDet , RfdResponse response) {
+	private static List<RfdSanOrdDataDocDet> sanOrdDataDocDetsMapper(List<CommonDocDetails_Dto> dtoList,
+			SanctionOrderDet orderDet, RfdResponse response) {
 		if (ObjectUtils.isEmpty(dtoList))
 			return null;
 		return dtoList.stream().map(dto -> {
-			RfdSanOrdDataDocDet dataDocDet = setCommonValues(new RfdSanOrdDataDocDet() , response);
+			RfdSanOrdDataDocDet dataDocDet = setCommonValues(new RfdSanOrdDataDocDet(), response);
 			BeanUtils.copyProperties(dto, dataDocDet);
 			dataDocDet.setSanctionOrderDet(orderDet);
 			return dataDocDet;
