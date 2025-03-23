@@ -1,6 +1,19 @@
 # Compiled class file
 *.class
 
+/bin
+/target
+
+.factorypath
+.classpath
+.settings
+.project
+
+.DS_Store
+
+mvnw
+mvnw.cmd
+
 # Log file
 *.log
 
