@@ -40,6 +40,6 @@ public class NtcPersonalHearingDtls extends CommonEntityForAll{
 	private String requestedtime;
 	
     @OneToOne
-    @JoinColumn(name = "rfdNoticeData_id", referencedColumnName = "id")
+    @JoinColumn(name = "rfdNoticeData_id", referencedColumnName = "id" , nullable = false)
     private RfdNoticeData rfdNoticeData;
 }

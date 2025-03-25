@@ -73,7 +73,7 @@ public class RplyExtnNotice extends CommonEntityForAll{
 //    private NoticeDataPersonalHiringDet prsnlhrng;
     
     @OneToOne
-    @JoinColumn(name = "rfdNoticeData_id", referencedColumnName = "id")
+    @JoinColumn(name = "rfdNoticeData_id", referencedColumnName = "id" , nullable = false)
     private RfdNoticeData rfdNoticeData;
 }
 

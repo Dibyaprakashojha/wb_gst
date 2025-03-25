@@ -39,10 +39,9 @@ public class RfdPaymentAdvOrderData extends CommonEntityForAll{
     @Column(name = "prev_paym_adv_no")
     private String prevPaymAdvNo;
 
-//    // One-to-One Relationship with PaymAdvDetails
-//    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-// //   @JoinColumn(name = "paym_adv_details_id") // Foreign key
-//    private PaymAdvDetails paymAdvDet;
+    // One-to-Many Relationship with PaymAdvDetails
+    @OneToMany(mappedBy = "rfdPaymentAdvOrderData", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PaymAdvAmntDetails> paymAdvAmtDet;
     
     @OneToOne(mappedBy = "rfdPaymentAdvOrderData", cascade = CascadeType.ALL, orphanRemoval = true)
     private PayAdvDelayedRefIntCess advDelayedRefIntCess;

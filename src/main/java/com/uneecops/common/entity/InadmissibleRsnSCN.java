@@ -31,7 +31,7 @@ public class InadmissibleRsnSCN extends CommonEntityForAll{
     private String name;
     
     @ManyToOne
-    @JoinColumn(name = "rfdNoticeData_id") // This column will be the FK in the child table
+    @JoinColumn(name = "rfdNoticeData_id" , nullable = false) // This column will be the FK in the child table
     private RfdNoticeData rfdNoticeData; // Reference to Parent Entity
 }
 

@@ -61,6 +61,6 @@ public class Declarationdtls  extends CommonEntityForAll{
     private String name;
     
     @OneToOne
-    @JoinColumn(name = "rfnd_application_id")
+    @JoinColumn(name = "rfnd_application_id" , nullable = false)
     private RfndApplicationData rfndApplicationData;
 }

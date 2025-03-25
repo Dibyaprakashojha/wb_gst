@@ -13,8 +13,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity
-@Table(name = "GST_RFD_REPL_LEDG_RECRE_SGST")
+//@Entity
+//@Table(name = "GST_RFD_REPL_LEDG_RECRE_SGST")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

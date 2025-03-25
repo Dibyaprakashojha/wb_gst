@@ -60,7 +60,7 @@ public class StatutoryOrderDetails extends CommonEntityForAll{
     private List<PaymentReferenceDetail> paymentReferenceDetails;
     
     @OneToOne
-    @JoinColumn(name = "rfnd_application_id")
+    @JoinColumn(name = "rfnd_application_id" , nullable = false)
     private RfndApplicationData rfndApplicationData;
     
 }

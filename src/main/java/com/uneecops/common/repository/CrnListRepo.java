@@ -1,10 +1,10 @@
-//package com.uneecops.common.repository;
-//
-//import org.springframework.data.jpa.repository.JpaRepository;
-//import org.springframework.stereotype.Repository;
-//
-//import com.uneecops.common.entity.CrnList;
-//@Repository
-//public interface CrnListRepo extends JpaRepository<CrnList, String> {
-//
-//}
+package com.uneecops.common.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import com.uneecops.common.entity.CrnList;
+@Repository
+public interface CrnListRepo extends JpaRepository<CrnList, String> {
+
+}

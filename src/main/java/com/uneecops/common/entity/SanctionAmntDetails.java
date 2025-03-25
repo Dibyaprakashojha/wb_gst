@@ -13,7 +13,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -34,6 +33,10 @@ public class SanctionAmntDetails extends CommonEntityForAll{
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sanc_amnt_det_seq")
 	@Column(name = "id")
 	private Long id;
+	
+	@Column(name = "sanc_amnt_type")
+	@Enumerated(EnumType.STRING)
+	private SanctionAmount sancAmntType;
 
 	@Column(name = "igst_intrest")
 	private BigDecimal igstIntrest;
@@ -106,10 +109,6 @@ public class SanctionAmntDetails extends CommonEntityForAll{
 	
 	@Column(name = "cess_Total")
 	private BigDecimal cessTot;
-
-	@Column(name = "sanc_amnt_type")
-	@Enumerated(EnumType.STRING)
-	private SanctionAmount sancAmntType;
 
 	@ManyToOne
 	@JoinColumn(name = "sancOrdDet_id", nullable = false)

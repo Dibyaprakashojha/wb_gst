@@ -24,6 +24,6 @@ public class RepSuppDoc extends CommonEntityForAll{
     private RfdRepSuppDocDet dcupdtls;
     
     @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "rfd_reply_data_id")  // Ensure the column name matches your database schema
+    @JoinColumn(name = "rfd_reply_data_id" , nullable = false)  // Ensure the column name matches your database schema
     private RfdReplyData rfdReplyData;
 }

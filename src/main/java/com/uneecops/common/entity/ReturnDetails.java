@@ -19,13 +19,13 @@ public class ReturnDetails extends CommonEntityForAll{
     @Column(name = "return_id")
     private Long returnId;
 
-    @Column(name = "return_type", length = 50, nullable = false)
+    @Column(name = "return_type", length = 50, nullable = true)
     private String returnType;
 
-    @Column(name = "tax_period", length = 6, nullable = false)
+    @Column(name = "tax_period", length = 6, nullable = true)
     private String fromTaxPeriod;
 
-    @Column(name = "return_filing_date", length = 20, nullable = false)
+    @Column(name = "return_filing_date", length = 20, nullable = true)
     private String date;  // Storing as String assuming formatted date is needed
 
     @Column(name = "arn", length = 50)

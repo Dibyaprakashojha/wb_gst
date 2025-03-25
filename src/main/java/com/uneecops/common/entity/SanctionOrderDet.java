@@ -66,22 +66,6 @@ public class SanctionOrderDet extends CommonEntityForAll{
 
     @Column(name = "other_reason")
     private String otherReason;
-
-//    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-//    @JoinColumn(name = "ref_amt_screen_data_id", referencedColumnName = "id")
-//    private RefAmtScreenDataEntity refAmtScreenData;
-    
-//    @OneToOne(mappedBy = "sanctionOrderDet", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private SanOrderScrnSpecIGSTData scrnSpecIGSTData;  
-//
-//    @OneToOne(mappedBy = "sanctionOrderDet", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private SanOrderScrnSpecCGSTData scrnSpecCGSTData;  
-//  
-//    @OneToOne(mappedBy = "sanctionOrderDet", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private SanOrderScrnSpecSGSTData scrnSpecSGSTData;
-//    
-//    @OneToOne(mappedBy = "sanctionOrderDet", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private SanOrderScrnSpecCESSData scrnSpecCESSData;
     
     @OneToMany(mappedBy = "sanctionOrderDet", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<SanctionAmntDetails> sanctionAmntDetails;  

@@ -40,6 +40,6 @@ public class NoticeDataSuppDoc extends CommonEntityForAll{
     private String hashCode;
     
     @OneToOne
-    @JoinColumn(name = "rfdNoticeData_id", referencedColumnName = "id")
+    @JoinColumn(name = "rfdNoticeData_id", referencedColumnName = "id" , nullable = false)
     private RfdNoticeData rfdNoticeData;
 }

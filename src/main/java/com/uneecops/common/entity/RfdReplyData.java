@@ -57,43 +57,9 @@ public class RfdReplyData extends CommonEntityForAll{
     private RedReplDataRplyextnreq rplyextnreq;
 
     //One-to-One: Undertaking Amount Details
-//    @OneToOne(cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "rfdReplyData", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 //    @JoinColumn(name = "undertaking_amt_dtl_id", referencedColumnName = "id")
-//    private UndertakingAmtDetails undertakingAmtDtl;
-    
-    // One-to-One Mapping for Ledger Recredit Amounts
-    @OneToOne(mappedBy = "rfdReplyData", cascade = CascadeType.ALL, orphanRemoval = true)
-  //  @JoinColumn(name = "ledger_recredit_cess_id", referencedColumnName = "id")
-    private LedgerRecreditamountcess ledgerRecreditamountcess;
-
-    @OneToOne(mappedBy = "rfdReplyData", cascade = CascadeType.ALL, orphanRemoval = true)
- //   @JoinColumn(name = "ledger_recredit_cgst_id", referencedColumnName = "id")
-    private LedgerRecreditamountCGST ledgerRecreditamountCGST;
-
-    @OneToOne(mappedBy = "rfdReplyData", cascade = CascadeType.ALL, orphanRemoval = true)
- //   @JoinColumn(name = "ledger_recredit_igst_id", referencedColumnName = "id")
-    private LedgerRecreditamtIGST ledgerRecreditamtIGST;
-
-    @OneToOne(mappedBy = "rfdReplyData", cascade = CascadeType.ALL, orphanRemoval = true)
- //   @JoinColumn(name = "ledger_recredit_sgst_id", referencedColumnName = "id")
-    private LedgerRecreditamtSGST ledgerRecreditamtSGST;
-
-    // One-to-One Mapping for Inadmissible Amounts
-    @OneToOne(mappedBy = "rfdReplyData", cascade = CascadeType.ALL, orphanRemoval = true)
-  //  @JoinColumn(name = "inadmissible_igst_id", referencedColumnName = "id")
-    private InadmissibleAmounIGST amounIGST;
-
-    @OneToOne(mappedBy = "rfdReplyData", cascade = CascadeType.ALL, orphanRemoval = true)
-  //  @JoinColumn(name = "inadmissible_sgst_id", referencedColumnName = "id")
-    private InadmissibleAmounSGST amounSGST;
-
-    @OneToOne(mappedBy = "rfdReplyData", cascade = CascadeType.ALL, orphanRemoval = true)
-  //  @JoinColumn(name = "inadmissible_cess_id", referencedColumnName = "id")
-    private InadmissibleAmountcess amountcess;
-
-    @OneToOne(mappedBy = "rfdReplyData", cascade = CascadeType.ALL, orphanRemoval = true)
- //   @JoinColumn(name = "inadmissible_cgst_id", referencedColumnName = "id")
-    private InadmissibleAmountCGST amountCGST;
+    private List<UndertakingAmtDetails> undertakingAmtDtl;
 
     //One-to-One: Reply to Change Bank Account
     @OneToOne(mappedBy = "rfdReplyData", cascade = CascadeType.ALL, orphanRemoval = true)

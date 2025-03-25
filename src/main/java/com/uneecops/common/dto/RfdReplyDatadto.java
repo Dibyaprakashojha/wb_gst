@@ -56,7 +56,6 @@ public class RfdReplyDatadto {
 	@JsonProperty("SCNReply")
 	private ScnReply_Dto scnReply;
 	
-	@JsonProperty("undertakingNil")
-	private String undertakingNil;
+
 
 }

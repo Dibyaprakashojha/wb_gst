@@ -47,6 +47,6 @@ public class RfdRejAmntToDet extends CommonEntityForAll{
     private String taxOfficerName;
     
     @OneToOne
-    @JoinColumn(name = "rfd_rejected_amnt_data_id", referencedColumnName = "id")
+    @JoinColumn(name = "rfd_rejected_amnt_data_id", referencedColumnName = "id" , nullable = false)
     private RfdRejectedAmntData rfdRejectedAmntData;
 }

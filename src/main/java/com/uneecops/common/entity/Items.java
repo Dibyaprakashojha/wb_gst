@@ -38,25 +38,13 @@ public class Items extends CommonEntityForAll{
 	@OneToOne(mappedBy = "items", cascade = CascadeType.ALL, orphanRemoval = true)
 //	@JoinColumn(name = "rfd_app_data_id")
 	private RfndApplicationData rfdAppData;
-
-	// One-to-Many relationship with RfdNotice
-//	@OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
-//	private List<RfdNotice> rfdNotices;
 	
     @OneToOne(mappedBy = "item", cascade = CascadeType.ALL,orphanRemoval = true)
     private RfdNoticeData rfdNoticeData;  // One-to-Many Mapping with RfdNoticeData
-
-//    // One-to-Many Relation with Rfd PMT 03
-//	@OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
-//	private List<RfdPMT03> rfdPMT03;
 	
     // One-to-One with RfdRejectedAmntData (Reversed)
     @OneToOne(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
     private RfdRejectedAmntData rfdRejectedAmntData;
-
-//    //One-to-Many relationship with RfdReply
-//	@OneToMany(mappedBy = "item", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//	private List<RfdReply> rfdReply;
 	
     @OneToOne(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
   //  @JoinColumn(name = "rfd_reply_data_id", referencedColumnName = "id")
@@ -70,23 +58,11 @@ public class Items extends CommonEntityForAll{
     private RfdPaymentAdvOrderData rfdPaymentAdvcOrderData;
     
 //	=======================Map RfdSanctionOrderData related data with item =========================
-	// One-to-One relationship with ScrnSpecDetSanctionOrderDataEntity
-//	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-//	@JoinColumn(name = "sdtls_id", referencedColumnName = "id")
-//	private ScrnSpecDetSanctionOrdData scrnSpecDetSanctionOrderData;
 	
 	@OneToOne(mappedBy = "items", cascade = CascadeType.ALL, orphanRemoval = true)
  //   @JoinColumn(name = "sanc_order_det_id", referencedColumnName = "id")
     private SanctionOrderDet sanctionOrderDet;
 
-//	// One-to-Many relationship with CommonDocDetailsEntity
-//	@OneToMany(mappedBy = "items", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//	private List<RfdSanOrdDataDocDet> commonDocDetails;
-//
-//	// One-to-One relationship with CommonTaxOfficerDetEntity
-//	@OneToOne(mappedBy = "items", cascade = CascadeType.ALL, orphanRemoval = true)
-//	private RfdSanOrdTODet commonTaxOfficerDet;
-//	======================================================================================================
 
 	@Column(name = "ref_id")
 	private String refId;

@@ -110,11 +110,7 @@ public class RfdSanctionOrderDataMapper {
 			orderDet.setDemandAdjustedSgst(demandAdjustedSgst);
 
 		}
-
-//		orderDet.setScrnSpecIGSTData(scrnSpecIGSTDataMapper(dto.getRefAmtScreenData().getScrnSpecIGSTData(), orderDet));
-//		orderDet.setScrnSpecCGSTData(scrnSpecCGSTDataMapper(dto.getRefAmtScreenData().getScrnSpecCGSTData(), orderDet));
-//		orderDet.setScrnSpecCESSData(cessDataMapper(dto.getRefAmtScreenData().getScrnSpecCESSData(), orderDet));
-//		orderDet.setScrnSpecSGSTData(scrnSpecSGSTDataMapper(dto.getRefAmtScreenData().getScrnSpecSGSTData(), orderDet));
+		
 		orderDet.setCommonDocDetails(sanOrdDataDocDetsMapper(dataDto.getCommonDocDetails(), orderDet, rfdResponse));
 		orderDet.setCommonTaxOfficerDet(sanOrdTODetMapper(dataDto.getCommonTaxOfficerDet(), orderDet, rfdResponse));
 		orderDet.setSanctionAmntDetails(sanctionAmntDetailsMapper(dto, orderDet, rfdResponse));

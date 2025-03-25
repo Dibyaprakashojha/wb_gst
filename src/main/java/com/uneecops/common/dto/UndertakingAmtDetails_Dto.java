@@ -26,4 +26,7 @@ public class UndertakingAmtDetails_Dto {
 	
 	@JsonProperty("cess")
 	private ScreenSpeccess_Dto  screenSpeccess;
+	
+	@JsonProperty("undertakingNil")
+	private String undertakingNil;
 }

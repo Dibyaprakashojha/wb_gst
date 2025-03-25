@@ -24,7 +24,7 @@ public class RepmainDoc extends CommonEntityForAll{
     private RepSuppDocumentDetails repSuppDocumentDetails;
 
     //Many-to-One Relationship with RfdReplyData
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "rfd_reply_data_id")
+    @ManyToOne
+    @JoinColumn(name = "rfd_reply_data_id" , nullable = false)
     private RfdReplyData rfdReplyData;
 }

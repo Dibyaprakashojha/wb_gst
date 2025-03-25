@@ -53,36 +53,53 @@ public class RfndApplicationDataMapper {
 
 		appData.setDeclarationDetails(mapDeclarationDetails(dto.getDeclarationDetails(), appData, rfdResponse));
 
-		appData.setIgstFee(dto.getReferenceClaim().getIgstRefClaimDet().getFee());
-		appData.setIgstTax(dto.getReferenceClaim().getIgstRefClaimDet().getTax());
-		appData.setIgstTot(dto.getReferenceClaim().getIgstRefClaimDet().getTot());
-		appData.setIgstOthers(dto.getReferenceClaim().getIgstRefClaimDet().getOthers());
-		appData.setIgstPenalty(dto.getReferenceClaim().getIgstRefClaimDet().getPenalty());
-		appData.setIgstIntrest(dto.getReferenceClaim().getIgstRefClaimDet().getIntrest());
+		if(dto.getReferenceClaim() != null) {
+			
+			if(dto.getReferenceClaim().getIgstRefClaimDet() != null) {
+				appData.setIgstFee(dto.getReferenceClaim().getIgstRefClaimDet().getFee());
+				appData.setIgstTax(dto.getReferenceClaim().getIgstRefClaimDet().getTax());
+				appData.setIgstTot(dto.getReferenceClaim().getIgstRefClaimDet().getTot());
+				appData.setIgstOthers(dto.getReferenceClaim().getIgstRefClaimDet().getOthers());
+				appData.setIgstPenalty(dto.getReferenceClaim().getIgstRefClaimDet().getPenalty());
+				appData.setIgstIntrest(dto.getReferenceClaim().getIgstRefClaimDet().getIntrest());
+			}
 
-		appData.setCessFee(dto.getReferenceClaim().getCessRefClaimDet().getFee());
-		appData.setCessTax(dto.getReferenceClaim().getCessRefClaimDet().getTax());
-		appData.setCessTot(dto.getReferenceClaim().getCessRefClaimDet().getTot());
-		appData.setCessOthers(dto.getReferenceClaim().getCessRefClaimDet().getOthers());
-		appData.setCessPenalty(dto.getReferenceClaim().getCessRefClaimDet().getPenalty());
-		appData.setCessIntrest(dto.getReferenceClaim().getCessRefClaimDet().getIntrest());
 
-		appData.setSgstFee(dto.getReferenceClaim().getSgstRefClaimDet().getFee());
-		appData.setSgstTax(dto.getReferenceClaim().getSgstRefClaimDet().getTax());
-		appData.setSgstTot(dto.getReferenceClaim().getSgstRefClaimDet().getTot());
-		appData.setSgstOthers(dto.getReferenceClaim().getSgstRefClaimDet().getOthers());
-		appData.setSgstPenalty(dto.getReferenceClaim().getSgstRefClaimDet().getPenalty());
-		appData.setSgstIntrest(dto.getReferenceClaim().getSgstRefClaimDet().getIntrest());
+			if(dto.getReferenceClaim().getCessRefClaimDet() != null) {				
+				appData.setCessFee(dto.getReferenceClaim().getCessRefClaimDet().getFee());
+				appData.setCessTax(dto.getReferenceClaim().getCessRefClaimDet().getTax());
+				appData.setCessTot(dto.getReferenceClaim().getCessRefClaimDet().getTot());
+				appData.setCessOthers(dto.getReferenceClaim().getCessRefClaimDet().getOthers());
+				appData.setCessPenalty(dto.getReferenceClaim().getCessRefClaimDet().getPenalty());
+				appData.setCessIntrest(dto.getReferenceClaim().getCessRefClaimDet().getIntrest());
+			}
+			
 
-		appData.setCgstFee(dto.getReferenceClaim().getCgstRefClaimDet().getFee());
-		appData.setCgstTax(dto.getReferenceClaim().getCgstRefClaimDet().getTax());
-		appData.setCgstTot(dto.getReferenceClaim().getCgstRefClaimDet().getTot());
-		appData.setCgstOthers(dto.getReferenceClaim().getCgstRefClaimDet().getOthers());
-		appData.setCgstPenalty(dto.getReferenceClaim().getCgstRefClaimDet().getPenalty());
-		appData.setCgstIntrest(dto.getReferenceClaim().getCgstRefClaimDet().getIntrest());
+			if(dto.getReferenceClaim().getSgstRefClaimDet() != null) {
+				appData.setSgstFee(dto.getReferenceClaim().getSgstRefClaimDet().getFee());
+				appData.setSgstTax(dto.getReferenceClaim().getSgstRefClaimDet().getTax());
+				appData.setSgstTot(dto.getReferenceClaim().getSgstRefClaimDet().getTot());
+				appData.setSgstOthers(dto.getReferenceClaim().getSgstRefClaimDet().getOthers());
+				appData.setSgstPenalty(dto.getReferenceClaim().getSgstRefClaimDet().getPenalty());
+				appData.setSgstIntrest(dto.getReferenceClaim().getSgstRefClaimDet().getIntrest());
 
-		appData.setTotalInvoiceAmount(dto.getStatementSummary().getTotalInvoiceAmount());
-		appData.setInvoiceCount(dto.getStatementSummary().getInvoiceCount());
+			}
+
+			if(dto.getReferenceClaim().getCgstRefClaimDet() != null) {
+				appData.setCgstFee(dto.getReferenceClaim().getCgstRefClaimDet().getFee());
+				appData.setCgstTax(dto.getReferenceClaim().getCgstRefClaimDet().getTax());
+				appData.setCgstTot(dto.getReferenceClaim().getCgstRefClaimDet().getTot());
+				appData.setCgstOthers(dto.getReferenceClaim().getCgstRefClaimDet().getOthers());
+				appData.setCgstPenalty(dto.getReferenceClaim().getCgstRefClaimDet().getPenalty());
+				appData.setCgstIntrest(dto.getReferenceClaim().getCgstRefClaimDet().getIntrest());
+			}
+			
+		}
+
+		if(dto.getStatementSummary() != null) {
+			appData.setTotalInvoiceAmount(dto.getStatementSummary().getTotalInvoiceAmount());
+			appData.setInvoiceCount(dto.getStatementSummary().getInvoiceCount());
+		}
 		if (dto.getSupplierInfo() != null && !CollectionUtils.isEmpty(dto.getSupplierInfo().getInvoiceDtls())) {
 		    appData.setInvoiceDtls(mapInvoiceDetails(dto.getSupplierInfo().getInvoiceDtls(), appData, rfdResponse));
 		}

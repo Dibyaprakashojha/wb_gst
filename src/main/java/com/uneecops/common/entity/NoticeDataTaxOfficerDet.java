@@ -38,7 +38,7 @@ public class NoticeDataTaxOfficerDet extends CommonEntityForAll{
     private String taxOfficerName;
     
     @OneToOne
-    @JoinColumn(name = "rfdNoticeData_id", referencedColumnName = "id")
+    @JoinColumn(name = "rfdNoticeData_id", referencedColumnName = "id" , nullable = false)
     private RfdNoticeData rfdNoticeData;
     
     
